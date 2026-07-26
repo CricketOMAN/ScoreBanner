@@ -127,8 +127,7 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
         const sw = wrapper.scrollWidth;
         const sh = wrapper.scrollHeight;
         if (sw > 0 && sh > 0) {
-            const maxContentHeight = ch * 0.25;
-            const scale = Math.min(cw / sw, maxContentHeight / sh, 1);
+            const scale = Math.min((cw * 0.95) / sw, (ch * 0.25) / sh, 1);
             let ruleEl = document.getElementById('dynamic-scale-rule');
             if (!ruleEl) {
                 ruleEl = document.createElement('style');
