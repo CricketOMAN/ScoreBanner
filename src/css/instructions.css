@@ -118,6 +118,7 @@
 .instructions .tag-topguns-dark { background: #0a0a0a; color: #c8c8d4; border: 1px solid #3344dd; }
 .instructions .tag-tul { background: #c8c8d4; color: #d42b2b; border: 1px solid #d42b2b; }
 .instructions .tag-tud { background: #0a0a0a; color: #c8c8d4; border: 1px solid #d42b2b; }
+.instructions .tag-orange { background: #ff4136; color: #ffffff; }
 
 /*
  * Streamlabs Mode (body.prov-sl)
