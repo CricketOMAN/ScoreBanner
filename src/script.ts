@@ -88,7 +88,7 @@ async function updateScore() {
 
 /**
  * Injects dynamic scaling infrastructure that measures the rendered scoreboard
- * width and applies a CSS scale transform to fit it within the viewport.
+ * width and height then applies a CSS scale transform to fit it within the viewport.
  */
 function injectDynamicScale(overlayEl: HTMLElement): void {
     if (document.getElementById('scaling-wrapper')) return;
@@ -113,6 +113,7 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
             display: inline-flex;
             flex-direction: column;
             align-items: center;
+            gap: 4px;
             transform-origin: center bottom;
         }
     `;
@@ -121,10 +122,13 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
     let measureTimer: number | null = null;
 
     function applyScale() {
-        const containerWidth = overlayEl.clientWidth;
-        const contentWidth = wrapper.scrollWidth;
-        if (contentWidth > 0) {
-            const scale = Math.min(containerWidth / contentWidth, 1);
+        const cw = overlayEl.clientWidth;
+        const ch = overlayEl.clientHeight;
+        const sw = wrapper.scrollWidth;
+        const sh = wrapper.scrollHeight;
+        if (sw > 0 && sh > 0) {
+            const pad = 16;
+            const scale = Math.min(cw / sw, (ch - pad) / sh, 1);
             let ruleEl = document.getElementById('dynamic-scale-rule');
             if (!ruleEl) {
                 ruleEl = document.createElement('style');
