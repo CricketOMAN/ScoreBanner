@@ -35,6 +35,7 @@ async function updateScore() {
 
     applyTheme(params.theme);
     updateLogo(params.logo);
+    handleStreamlabs(params, overlayEl);
 
     if (params.mode === 'replay') {
         const data = sampleReplayData[replayIndex] as unknown as CricketAPIData;
@@ -82,6 +83,79 @@ async function updateScore() {
     } catch (error) {
         console.error('Error fetching score data:', error);
         DOM.teamName.textContent = 'Error';
+    }
+}
+
+/**
+ * Injects dynamic scaling infrastructure that measures the rendered scoreboard
+ * width and applies a CSS scale transform to fit it within the viewport.
+ */
+function injectDynamicScale(overlayEl: HTMLElement): void {
+    if (document.getElementById('scaling-wrapper')) return;
+
+    const wrapper = document.createElement('div');
+    wrapper.id = 'scaling-wrapper';
+
+    const result = document.getElementById('result');
+    const first = document.getElementById('firstInnings');
+    const second = document.getElementById('secondInnings');
+    if (!first) return;
+
+    overlayEl.insertBefore(wrapper, result);
+    if (result) wrapper.appendChild(result);
+    wrapper.appendChild(first);
+    if (second) wrapper.appendChild(second);
+
+    const baseStyle = document.createElement('style');
+    baseStyle.id = 'dynamic-scale-base';
+    baseStyle.textContent = `
+        #scaling-wrapper {
+            display: inline-flex;
+            flex-direction: column;
+            align-items: center;
+            transform-origin: center bottom;
+        }
+    `;
+    document.head.appendChild(baseStyle);
+
+    let measureTimer: number | null = null;
+
+    function applyScale() {
+        const containerWidth = overlayEl.clientWidth;
+        const contentWidth = wrapper.scrollWidth;
+        if (contentWidth > 0) {
+            const scale = Math.min(containerWidth / contentWidth, 1);
+            let ruleEl = document.getElementById('dynamic-scale-rule');
+            if (!ruleEl) {
+                ruleEl = document.createElement('style');
+                ruleEl.id = 'dynamic-scale-rule';
+                document.head.appendChild(ruleEl);
+            }
+            ruleEl.textContent = `#scaling-wrapper { transform: scale(${scale}); }`;
+        }
+    }
+
+    const observer = new MutationObserver(() => {
+        if (measureTimer !== null) clearTimeout(measureTimer);
+        measureTimer = window.setTimeout(applyScale, 50);
+    });
+    observer.observe(first, { childList: true, subtree: true, characterData: true });
+
+    let resizeTimer: number | null = null;
+    window.addEventListener('resize', () => {
+        if (resizeTimer !== null) clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(applyScale, 80);
+    });
+
+    requestAnimationFrame(applyScale);
+}
+
+function handleStreamlabs(params: ReturnType<typeof getQueryParams>, overlayEl: HTMLElement | null): void {
+    if (params.sl) {
+        document.body.classList.add('prov-sl');
+    }
+    if (params.dynamic || params.sl) {
+        if (overlayEl) injectDynamicScale(overlayEl);
     }
 }
 

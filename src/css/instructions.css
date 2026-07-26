@@ -118,3 +118,84 @@
 .instructions .tag-topguns-dark { background: #0a0a0a; color: #c8c8d4; border: 1px solid #3344dd; }
 .instructions .tag-tul { background: #c8c8d4; color: #d42b2b; border: 1px solid #d42b2b; }
 .instructions .tag-tud { background: #0a0a0a; color: #c8c8d4; border: 1px solid #d42b2b; }
+
+/*
+ * Streamlabs Mode (body.prov-sl)
+ * Compact overrides for Streamlabs / smaller browser-source canvases.
+ * Scoped under body.prov-sl so base styles are unaffected.
+ */
+body.prov-sl .batting-team-info,
+body.prov-sl .bowling-team-info {
+    display: none;
+}
+
+body.prov-sl .batsman-info,
+body.prov-sl .bowler-info {
+    min-width: 0;
+    padding: 0 8px;
+}
+
+body.prov-sl .batsman-name {
+    font-size: 14px;
+}
+
+body.prov-sl .bowler-name {
+    font-size: 14px;
+}
+
+body.prov-sl .batsman-runs-balls,
+body.prov-sl .bowler-figures {
+    font-size: 12px;
+}
+
+body.prov-sl .scorecard-pill {
+    padding: 4px 14px;
+}
+
+body.prov-sl .team-name {
+    font-size: 15px;
+}
+
+body.prov-sl .score,
+body.prov-sl .wickets {
+    font-size: 15px;
+}
+
+body.prov-sl .overs {
+    font-size: 11px;
+}
+
+body.prov-sl .ball-indicator {
+    width: 18px;
+    height: 18px;
+    min-width: 18px;
+    border-radius: 9px;
+    font-size: 9px;
+}
+
+body.prov-sl .ball-indicator.wide,
+body.prov-sl .ball-indicator.no-ball,
+body.prov-sl .ball-indicator.leg-bye,
+body.prov-sl .ball-indicator.bye {
+    font-size: 7px;
+}
+
+body.prov-sl .ball-indicator.dot {
+    width: 18px;
+    height: 18px;
+}
+
+body.prov-sl #secondInnings {
+    font-size: 12px;
+    padding: 3px 12px;
+}
+
+body.prov-sl #result {
+    font-size: 16px;
+    padding: 6px 18px;
+}
+
+body.prov-sl .score-overlay {
+    padding: 0 8px;
+    gap: 2px;
+}

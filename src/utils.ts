@@ -2,7 +2,7 @@ import { CONFIG } from './config';
 
 /**
  * Parses query parameters from the URL.
- * @returns An object containing the parsed query parameters (matchId, clubId, logo, debug, theme, mode).
+ * @returns An object containing the parsed query parameters (matchId, clubId, logo, debug, theme, mode, dynamic, sl).
  */
 export function getQueryParams() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -12,7 +12,9 @@ export function getQueryParams() {
         logo: urlParams.get('logo'),
         debug: urlParams.get('debug'), // Returns string value or null
         theme: urlParams.get('theme'),
-        mode: urlParams.get('mode')
+        mode: urlParams.get('mode'),
+        dynamic: urlParams.get('dynamic'),
+        sl: urlParams.get('sl')
     };
 }
 
