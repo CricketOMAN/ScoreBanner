@@ -248,7 +248,7 @@
                 <label>Club ID (CricClubs club ID)</label>
                 <div class="radio-group">
                     <label>
-                        <input type="radio" name="clubId" value="40319">
+                        <input type="radio" name="clubId" value="40319" checked>
                         USACricketJunior
                     </label>
                     <label>
@@ -262,6 +262,7 @@
             <div class="form-group">
                 <label>Theme</label>
                 <div class="theme-grid" id="theme-grid">
+                    <div class="theme-btn" data-theme="orange">orange</div>
                     <div class="theme-btn" data-theme="classic">classic</div>
                     <div class="theme-btn" data-theme="modern">modern</div>
                     <div class="theme-btn" data-theme="neon">neon</div>
@@ -279,7 +280,6 @@
                     <div class="theme-btn" data-theme="ted">ted</div>
                     <div class="theme-btn" data-theme="tul">tul</div>
                     <div class="theme-btn" data-theme="tud">tud</div>
-                    <div class="theme-btn" data-theme="orange">orange</div>
                 </div>
             </div>
             
@@ -387,10 +387,10 @@
         const openBtn = document.getElementById('open-btn');
         const copyBtn = document.getElementById('copy-btn');
         
-        let selectedTheme = 'modern';
+        let selectedTheme = 'orange';
         
         // Set default theme as active
-        const defaultThemeBtn = themeGrid.querySelector('[data-theme="modern"]');
+        const defaultThemeBtn = themeGrid.querySelector('[data-theme="orange"]');
         if (defaultThemeBtn) {
             defaultThemeBtn.classList.add('active');
         }

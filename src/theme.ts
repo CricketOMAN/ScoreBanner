@@ -23,14 +23,14 @@ const AVAILABLE_THEMES = ['classic', 'modern', 'neon', 'kkr', 'rcb', 'mi', 'csk'
 
 /**
  * Applies the selected CSS theme to the application.
- * @param theme - The theme name ('classic', 'modern', or 'neon').
+ * @param theme - The theme name. Defaults to 'orange' if not provided or invalid.
  */
 export function applyTheme(theme: string | null) {
     document.body.classList.remove(...AVAILABLE_THEMES.map(t => `theme-${t}`));
     if (theme && AVAILABLE_THEMES.includes(theme as any)) {
         document.body.classList.add(`theme-${theme}`);
     } else {
-        document.body.classList.add('theme-modern');
+        document.body.classList.add('theme-orange');
     }
 }
 
