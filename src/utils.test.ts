@@ -54,7 +54,7 @@ describe('getQueryParams', () => {
     it('should use default clubId if not provided', () => {
         mockLocationSearch('');
         const params = getQueryParams();
-        expect(params.clubId).toBe('1089463'); // Values from CONFIG.DEFAULT_CLUB_ID
+        expect(params.clubId).toBe('40319'); // Values from CONFIG.DEFAULT_CLUB_ID
     });
 
     it('should override clubId if provided', () => {
