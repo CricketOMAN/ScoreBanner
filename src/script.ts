@@ -40,6 +40,7 @@ async function updateScore() {
     if (params.mode === 'replay') {
         const data = sampleReplayData[replayIndex] as unknown as CricketAPIData;
         updateScoreboard(data);
+        syncMarquees();
         replayIndex = (replayIndex + 1) % sampleReplayData.length;
         return;
     }
@@ -79,11 +80,30 @@ async function updateScore() {
 
         await updateTeamLogos(data);
         updateScoreboard(data);
+        syncMarquees();
 
     } catch (error) {
         console.error('Error fetching score data:', error);
         DOM.teamName.textContent = 'Error';
     }
+}
+
+function syncMarquees() {
+    const first = document.getElementById('firstInnings');
+    if (!first) return;
+    const mqSelectors = ['.batsman-name', '.batsman-runs-balls', '.bowler-name', '.bowler-figures', '.team-name'];
+    mqSelectors.forEach(sel => {
+        first.querySelectorAll(sel).forEach(el => {
+            const e = el as HTMLElement;
+            if (e.scrollWidth > e.clientWidth + 1) {
+                e.classList.add('marquee');
+                e.style.setProperty('--mo', -(e.scrollWidth - e.clientWidth) + 'px');
+            } else {
+                e.classList.remove('marquee');
+                e.style.removeProperty('--mo');
+            }
+        });
+    });
 }
 
 /**
@@ -125,12 +145,21 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
         #scaling-wrapper .bowler-figures,
         #scaling-wrapper .team-name {
             overflow: hidden;
-            text-overflow: ellipsis;
             max-width: 100%;
         }
         #scaling-wrapper .ball-by-ball-container {
             overflow: hidden;
             min-width: 0;
+        }
+        @keyframes marquee-text {
+            0%, 20% { text-indent: 0; }
+            45% { text-indent: var(--mo, 0); }
+            55%, 75% { text-indent: var(--mo, 0); }
+            100% { text-indent: 0; }
+        }
+        #scaling-wrapper .marquee {
+            text-overflow: clip;
+            animation: marquee-text 10s ease-in-out infinite;
         }
         #chase-info {
             display: none;
@@ -256,7 +285,10 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
         resizeTimer = window.setTimeout(applyScale, 80);
     });
 
-    requestAnimationFrame(applyScale);
+    requestAnimationFrame(() => {
+        applyScale();
+        syncMarquees();
+    });
 }
 
 function handleStreamlabs(params: ReturnType<typeof getQueryParams>, overlayEl: HTMLElement | null): void {
