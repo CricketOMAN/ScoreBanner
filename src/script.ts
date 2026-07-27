@@ -134,6 +134,12 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
         }
         #chase-info .chase-need-line {
             font-weight: 600;
+            font-size: 12px;
+            white-space: nowrap;
+            color: var(--brand-accent, #ffcc00);
+        }
+        #chase-info .chase-need-detail {
+            font-weight: 600;
             font-size: 11px;
             white-space: nowrap;
             color: var(--text-secondary, #e2e8f0);
@@ -148,8 +154,11 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
     chaseTeamLine.className = 'chase-team-line';
     const chaseNeedLine = document.createElement('div');
     chaseNeedLine.className = 'chase-need-line';
+    const chaseNeedDetail = document.createElement('div');
+    chaseNeedDetail.className = 'chase-need-detail';
     chaseInfo.appendChild(chaseTeamLine);
     chaseInfo.appendChild(chaseNeedLine);
+    chaseInfo.appendChild(chaseNeedDetail);
     const bowlingInfo = first.querySelector('.bowling-team-info');
     if (bowlingInfo) first.insertBefore(chaseInfo, bowlingInfo);
     else first.appendChild(chaseInfo);
@@ -169,7 +178,15 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
             if (s) parts.push(s.textContent + '/' + (w ? w.textContent : ''));
             if (o) parts.push(o.textContent);
             chaseTeamLine.textContent = parts.join('  ');
-            chaseNeedLine.textContent = sn.textContent || sn.innerHTML;
+            const raw = sn.textContent || sn.innerHTML;
+            const fromIdx = raw.indexOf(' FROM ');
+            if (fromIdx !== -1) {
+                chaseNeedLine.textContent = raw.slice(0, fromIdx);
+                chaseNeedDetail.textContent = raw.slice(fromIdx + 1);
+            } else {
+                chaseNeedLine.textContent = raw;
+                chaseNeedDetail.textContent = '';
+            }
             chaseInfo.style.display = 'flex';
             si.style.display = 'none';
         } else {
