@@ -116,9 +116,64 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
             gap: 4px;
             transform-origin: center bottom;
         }
+        #chase-info {
+            display: none;
+            align-items: center;
+            white-space: nowrap;
+            font-weight: 600;
+            padding: 0 6px 0 14px;
+            margin-left: 6px;
+            border-left: 1px solid rgba(255,255,255,0.2);
+            color: var(--brand-accent, #ffcc00);
+        }
     `;
     document.head.appendChild(baseStyle);
 
+    /* --- Merge second-innings chase info into the main bar --- */
+    const chaseInfo = document.createElement('div');
+    chaseInfo.id = 'chase-info';
+    const bowlingInfo = first.querySelector('.bowling-team-info');
+    if (bowlingInfo) first.insertBefore(chaseInfo, bowlingInfo);
+    else first.appendChild(chaseInfo);
+
+    function syncChaseInfo() {
+        const si = document.getElementById('secondInnings');
+        const sn = document.getElementById('score-needed');
+        if (!si || !sn) return;
+
+        if (si.classList.contains('is-visible') && sn.textContent && sn.textContent !== '-') {
+            const parts: string[] = [];
+            const n = document.getElementById('second-team-name');
+            const s = document.getElementById('second-team-score');
+            const w = document.getElementById('second-team-wickets');
+            const o = document.getElementById('second-team-overs');
+            if (n && n.textContent) parts.push(n.textContent);
+            if (s) parts.push(s.textContent + '/' + (w ? w.textContent : ''));
+            if (o) parts.push(o.textContent);
+            const need = sn.textContent || sn.innerHTML;
+            if (need) parts.push(need);
+            chaseInfo.textContent = parts.join('  ');
+            chaseInfo.style.display = 'flex';
+            si.style.display = 'none';
+        } else {
+            chaseInfo.style.display = 'none';
+            si.style.display = '';
+        }
+    }
+
+    if (second) {
+        const co = new MutationObserver(syncChaseInfo);
+        co.observe(second, { attributes: true, attributeFilter: ['class'] });
+        const sn = document.getElementById('score-needed');
+        if (sn) co.observe(sn, { childList: true, characterData: true, subtree: true });
+        ['second-team-name','second-team-score','second-team-wickets','second-team-overs'].forEach(id => {
+            const el = document.getElementById(id);
+            if (el) co.observe(el, { childList: true, characterData: true });
+        });
+    }
+    syncChaseInfo();
+
+    /* --- Dynamic scaling --- */
     let measureTimer: number | null = null;
 
     function applyScale() {
@@ -138,11 +193,11 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
         }
     }
 
-    const observer = new MutationObserver(() => {
+    const mo = new MutationObserver(() => {
         if (measureTimer !== null) clearTimeout(measureTimer);
         measureTimer = window.setTimeout(applyScale, 50);
     });
-    observer.observe(first, { childList: true, subtree: true, characterData: true });
+    mo.observe(first, { childList: true, subtree: true, characterData: true });
 
     let resizeTimer: number | null = null;
     window.addEventListener('resize', () => {
