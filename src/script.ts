@@ -129,8 +129,22 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
             max-width: 100%;
         }
         #scaling-wrapper .ball-by-ball-container {
-            overflow: hidden;
-            min-width: 0;
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+        #scaling-wrapper .ball-by-ball-container .ball-indicator {
+            width: 14px;
+            height: 14px;
+            min-width: 14px;
+            font-size: 7px;
+            border-radius: 50%;
+        }
+        #scaling-wrapper .ball-by-ball-container .ball-indicator.wide,
+        #scaling-wrapper .ball-by-ball-container .ball-indicator.no-ball,
+        #scaling-wrapper .ball-by-ball-container .ball-indicator.leg-bye,
+        #scaling-wrapper .ball-by-ball-container .ball-indicator.bye {
+            font-size: 6px;
         }
         #chase-info {
             display: none;
