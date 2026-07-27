@@ -118,13 +118,25 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
         }
         #chase-info {
             display: none;
-            align-items: center;
-            white-space: nowrap;
-            font-weight: 600;
-            padding: 0 6px 0 14px;
-            margin-left: 6px;
+            flex-direction: column;
+            align-items: flex-start;
+            justify-content: center;
+            padding: 0 4px 0 12px;
+            margin-left: 4px;
             border-left: 1px solid rgba(255,255,255,0.2);
             color: var(--brand-accent, #ffcc00);
+            line-height: 1.3;
+        }
+        #chase-info .chase-team-line {
+            font-weight: 700;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+        #chase-info .chase-need-line {
+            font-weight: 600;
+            font-size: 11px;
+            white-space: nowrap;
+            color: var(--text-secondary, #e2e8f0);
         }
     `;
     document.head.appendChild(baseStyle);
@@ -132,6 +144,12 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
     /* --- Merge second-innings chase info into the main bar --- */
     const chaseInfo = document.createElement('div');
     chaseInfo.id = 'chase-info';
+    const chaseTeamLine = document.createElement('div');
+    chaseTeamLine.className = 'chase-team-line';
+    const chaseNeedLine = document.createElement('div');
+    chaseNeedLine.className = 'chase-need-line';
+    chaseInfo.appendChild(chaseTeamLine);
+    chaseInfo.appendChild(chaseNeedLine);
     const bowlingInfo = first.querySelector('.bowling-team-info');
     if (bowlingInfo) first.insertBefore(chaseInfo, bowlingInfo);
     else first.appendChild(chaseInfo);
@@ -150,9 +168,8 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
             if (n && n.textContent) parts.push(n.textContent);
             if (s) parts.push(s.textContent + '/' + (w ? w.textContent : ''));
             if (o) parts.push(o.textContent);
-            const need = sn.textContent || sn.innerHTML;
-            if (need) parts.push(need);
-            chaseInfo.textContent = parts.join('  ');
+            chaseTeamLine.textContent = parts.join('  ');
+            chaseNeedLine.textContent = sn.textContent || sn.innerHTML;
             chaseInfo.style.display = 'flex';
             si.style.display = 'none';
         } else {
