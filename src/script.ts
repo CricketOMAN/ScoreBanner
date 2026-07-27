@@ -116,6 +116,22 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
             gap: 4px;
             transform-origin: center bottom;
         }
+        #scaling-wrapper .score-overlay {
+            overflow: hidden;
+        }
+        #scaling-wrapper .batsman-name,
+        #scaling-wrapper .batsman-runs-balls,
+        #scaling-wrapper .bowler-name,
+        #scaling-wrapper .bowler-figures,
+        #scaling-wrapper .team-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 100%;
+        }
+        #scaling-wrapper .ball-by-ball-container {
+            overflow: hidden;
+            min-width: 0;
+        }
         #chase-info {
             display: none;
             flex-direction: column;
