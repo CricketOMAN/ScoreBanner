@@ -113,16 +113,85 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
             display: inline-flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 3px;
             transform-origin: center bottom;
+        }
+        #scaling-wrapper .score-overlay {
+            padding: 3px 10px;
+            gap: 6px;
+        }
+        #scaling-wrapper .team-logo {
+            height: 24px;
+            width: 24px;
+        }
+        #scaling-wrapper .batting-team-info,
+        #scaling-wrapper .bowling-team-info {
+            padding: 2px;
+            min-width: 32px;
+            min-height: 32px;
+        }
+        #scaling-wrapper .scorecard-pill {
+            padding: 2px 10px;
+            min-width: 100px;
+            min-height: 30px;
+        }
+        #scaling-wrapper .team-name {
+            font-size: 13px;
+            margin-bottom: 1px;
+        }
+        #scaling-wrapper .score {
+            font-size: 16px;
+        }
+        #scaling-wrapper .wickets {
+            font-size: 13px;
+        }
+        #scaling-wrapper .overs {
+            font-size: 11px;
+        }
+        #scaling-wrapper .batsman-info,
+        #scaling-wrapper .bowler-info {
+            gap: 2px;
+        }
+        #scaling-wrapper .batsman-row,
+        #scaling-wrapper .bowler-row {
+            padding: 2px 6px;
+        }
+        #scaling-wrapper .batsman-name,
+        #scaling-wrapper .bowler-name {
+            font-size: 13px;
+        }
+        #scaling-wrapper .batsman-runs-balls,
+        #scaling-wrapper .bowler-figures {
+            font-size: 12px;
+        }
+        #scaling-wrapper .ball-by-ball-container {
+            gap: 3px;
+        }
+        #scaling-wrapper .ball-indicator {
+            width: 14px;
+            height: 14px;
+            min-width: 14px;
+            font-size: 8px;
+            border-radius: 7px;
+        }
+        #scaling-wrapper .ball-indicator.wide,
+        #scaling-wrapper .ball-indicator.no-ball,
+        #scaling-wrapper .ball-indicator.leg-bye,
+        #scaling-wrapper .ball-indicator.bye {
+            font-size: 6px;
+        }
+        #scaling-wrapper .ball-indicator.dot::after {
+            width: 5px;
+            height: 5px;
         }
         #chase-info {
             display: none;
             align-items: center;
             white-space: nowrap;
             font-weight: 600;
-            padding: 0 6px 0 14px;
-            margin-left: 6px;
+            font-size: 12px;
+            padding: 0 4px 0 10px;
+            margin-left: 4px;
             border-left: 1px solid rgba(255,255,255,0.2);
             color: var(--brand-accent, #ffcc00);
         }
