@@ -131,6 +131,7 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
             font-weight: 700;
             font-size: 13px;
             white-space: nowrap;
+            color: #ff851b;
         }
         #chase-info .chase-need-line {
             font-weight: 600;
