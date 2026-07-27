@@ -188,7 +188,13 @@ Enabled when `?dynamic=1` or `?sl=1` is present. Located in `src/script.ts`, `in
                     1)
    ```
 4. **Application:** A dynamic `<style>` element (`#dynamic-scale-rule`) is injected with `#scaling-wrapper { transform: scale(N) }`.
-5. **Reactivity:** A `MutationObserver` on `#firstInnings` triggers debounced (50ms) re-measurement when content changes. A `resize` listener also triggers debounced (80ms) re-measurement. Initial measurement via `requestAnimationFrame`.
+5. **Overflow protection CSS:** A second `<style>` element (`#dynamic-scale-base`) is injected with rules that prevent text overlap and ensure content fits within the scaled wrapper:
+   - `#scaling-wrapper .score-overlay { overflow: hidden; }` — clips child overflow at the bar boundary
+   - `#scaling-wrapper .batsman-name, .batsman-runs-balls, .bowler-name, .bowler-figures, .team-name { overflow: hidden; max-width: 100%; }` — constrains text elements to their flex container without ellipsis truncation (clean clip)
+   - `#scaling-wrapper .ball-by-ball-container { display: flex; gap: 3px; }` — compact ball layout
+   - `#scaling-wrapper .ball-by-ball-container .ball-indicator { width: 14px; height: 14px; font-size: 7px; border-radius: 50%; }` — reduced to 14px so a full over (6+ extras) always fits without clipping
+6. **Reactivity:** A `MutationObserver` on `#firstInnings` triggers debounced (50ms) re-measurement when content changes. A `resize` listener also triggers debounced (80ms) re-measurement. Initial measurement via `requestAnimationFrame`.
+
 6. **Chase info merge:** When second innings is active, the chase content is rendered as a 3-line block inside `#firstInnings` and the separate `#secondInnings` row is hidden, halving the overlay height.
 
 ---

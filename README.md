@@ -6,7 +6,7 @@ A professional, lightweight, and responsive cricket scorecard overlay designed f
 
 - **Real-Time Updates**: Polls the API every 5 seconds for live scores.
 - **18 Visual Themes**: Orange (default), Modern, Classic, Neon, IPL team themes (KKR, RCB, MI, CSK, DC, RR, SRH, PBKS, GT, LSG), and Topguns themes.
-- **Dynamic Scaling** (`?dynamic=1`): Automatically scales the scoreboard to fit the viewport width (95%) while capping height at 25%, ensuring it works at 1920×1080, 1280×720, or any resolution.
+- **Dynamic Scaling** (`?dynamic=1`): Automatically scales the scoreboard to fit the viewport width (95%) while capping height at 25%, ensuring it works at 1920×1080, 1280×720, or any resolution. Overflow protection and compact ball indicators (14px) are injected alongside the scale transform.
 - **Streamlabs Mode** (`?sl=1`): Compact layout that hides team logos, reduces fonts and spacing for restricted browser-source canvases. Implicitly enables dynamic scaling.
 - **Chase Info Integration**: When the second innings chase bar appears, its content (opposing score + "NEED X FROM Y OVERS Z RRR") is rendered inline within the main bar as a 3-line block, eliminating a second row.
 - **Self-Hosted Fonts**: Montserrat is bundled for consistent rendering across all devices without external requests.
