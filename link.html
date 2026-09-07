@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cricket Scorecard Overlay - Setup</title>
+    <title>Link Live Stream - Cricket Scorecard</title>
     <style>
         * {
             box-sizing: border-box;
@@ -77,98 +77,6 @@
             color: #666;
         }
         
-        .radio-group {
-            display: flex;
-            gap: 15px;
-            margin-bottom: 10px;
-        }
-        
-        .radio-group label {
-            display: inline-flex;
-            align-items: center;
-            margin: 0;
-            font-size: 14px;
-            color: #e6edf3;
-            cursor: pointer;
-        }
-        
-        .radio-group input[type="radio"] {
-            width: auto;
-            margin-right: 6px;
-            accent-color: #ff4136;
-        }
-        
-        .checkbox-group {
-            display: flex;
-            gap: 20px;
-            margin-bottom: 10px;
-        }
-        
-        .checkbox-group label {
-            display: inline-flex;
-            align-items: center;
-            margin: 0;
-            font-size: 14px;
-            color: #e6edf3;
-            cursor: pointer;
-        }
-        
-        .checkbox-group input[type="checkbox"] {
-            width: auto;
-            margin-right: 6px;
-            accent-color: #ff4136;
-        }
-        
-        .theme-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 8px;
-            margin-top: 8px;
-        }
-        
-        .theme-btn {
-            padding: 8px 12px;
-            background: #0d1117;
-            border: 1px solid #2a3645;
-            border-radius: 6px;
-            text-align: center;
-            font-size: 12px;
-            color: #e6edf3;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            text-transform: capitalize;
-        }
-        
-        .theme-btn:hover {
-            border-color: #ff4136;
-            background: #1a2028;
-        }
-        
-        .theme-btn.active {
-            background: #ff4136;
-            border-color: #ff4136;
-            color: #fff;
-        }
-        
-        .preview-label {
-            display: block;
-            font-size: 13px;
-            color: #9fb0c0;
-            margin-bottom: 6px;
-            margin-top: 16px;
-        }
-        
-        .url-preview {
-            word-break: break-all;
-            color: #7ee2a8;
-            font-size: 13px;
-            padding: 10px 12px;
-            background: rgba(13, 17, 23, 0.5);
-            border-radius: 6px;
-            border: 1px solid rgba(42, 54, 69, 0.3);
-            margin-bottom: 12px;
-        }
-        
         .btn-group {
             display: flex;
             gap: 12px;
@@ -209,27 +117,10 @@
             box-shadow: none;
         }
         
-        .btn-secondary {
-            background: #2a3645;
-            color: #e6edf3;
-        }
-        
-        .btn-secondary:hover {
-            background: #3a4655;
-        }
-        
         .help-text {
             color: #9fb0c0;
             font-size: 14px;
             margin-top: 16px;
-        }
-        
-        code {
-            background: rgba(42, 54, 69, 0.5);
-            border: 1px solid rgba(42, 54, 69, 0.8);
-            border-radius: 4px;
-            padding: 2px 6px;
-            font-size: 13px;
         }
 
         #status-message {
@@ -262,83 +153,6 @@
 
 <body>
     <div id="setup-panel" class="setup-panel">
-        <h1>🏏 Cricket Scorecard Overlay</h1>
-        <p class="subtitle">Configure your live scorecard overlay</p>
-        
-        <div class="box">
-            <div class="form-group">
-                <label>Match ID (CricClubs match ID)</label>
-                <input type="text" id="match-id" placeholder="e.g., 2169">
-            </div>
-            
-            <div class="form-group">
-                <label>Club ID (CricClubs club ID)</label>
-                <div class="radio-group">
-                    <label>
-                        <input type="radio" name="clubId" value="40319" checked>
-                        USACricketJunior
-                    </label>
-                    <label>
-                        <input type="radio" name="clubId" value="48">
-                        GPCL
-                    </label>
-                </div>
-                <input type="text" id="club-id" placeholder="Enter custom Club ID (default: USACricketJunior)">
-            </div>
-            
-            <div class="form-group">
-                <label>Theme</label>
-                <div class="theme-grid" id="theme-grid">
-                    <div class="theme-btn" data-theme="orange">orange</div>
-                    <div class="theme-btn" data-theme="classic">classic</div>
-                    <div class="theme-btn" data-theme="modern">modern</div>
-                    <div class="theme-btn" data-theme="neon">neon</div>
-                    <div class="theme-btn" data-theme="kkr">kkr</div>
-                    <div class="theme-btn" data-theme="rcb">rcb</div>
-                    <div class="theme-btn" data-theme="mi">mi</div>
-                    <div class="theme-btn" data-theme="csk">csk</div>
-                    <div class="theme-btn" data-theme="dc">dc</div>
-                    <div class="theme-btn" data-theme="rr">rr</div>
-                    <div class="theme-btn" data-theme="srh">srh</div>
-                    <div class="theme-btn" data-theme="pbks">pbks</div>
-                    <div class="theme-btn" data-theme="gt">gt</div>
-                    <div class="theme-btn" data-theme="lsg">lsg</div>
-                    <div class="theme-btn" data-theme="tel">tel</div>
-                    <div class="theme-btn" data-theme="ted">ted</div>
-                    <div class="theme-btn" data-theme="tul">tul</div>
-                    <div class="theme-btn" data-theme="tud">tud</div>
-                </div>
-            </div>
-            
-            <div class="form-group">
-                <label>Options</label>
-                <div class="checkbox-group">
-                    <label>
-                        <input type="checkbox" id="dynamic-scale" checked>
-                        Dynamic Scaling
-                    </label>
-                    <label>
-                        <input type="checkbox" id="streamlabs-mode" checked>
-                        Streamlabs Mode
-                    </label>
-                </div>
-            </div>
-            
-            <label class="preview-label">Preview</label>
-            <div class="url-preview" id="url-preview"></div>
-            
-            <div class="btn-group">
-                <a href="#" class="btn btn-primary" id="open-btn">
-                    <span>↗</span> Open
-                </a>
-                <button class="btn btn-secondary" id="copy-btn">
-                    <svg style="vertical-align: middle; margin-right: 4px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                    Copy
-                </button>
-            </div>
-            <p class="help-text">Add as a <strong>Browser Source</strong> in OBS (1920×1080, transparent). Match ID is <code>0</code> until live scoring starts.</p>
-        </div>
-
         <h1>Link Live Stream</h1>
         <p class="subtitle">Attach a YouTube live stream link to a CricClubs match.</p>
 
@@ -368,121 +182,6 @@
             <p class="help-text">Note: Ensure your browser allows popups for this site, as a temporary window must be opened to link the stream.</p>
         </div>
     </div>
-
-    <script>
-        // Setup Overlay Form Logic
-        const matchIdField = document.getElementById('match-id');
-        const clubIdField = document.getElementById('club-id');
-        const clubIdRadio = document.querySelectorAll('input[name="clubId"]');
-        const themeGrid = document.getElementById('theme-grid');
-        const urlPreview = document.getElementById('url-preview');
-        const openBtn = document.getElementById('open-btn');
-        const copyBtn = document.getElementById('copy-btn');
-        
-        // Link Stream Form UI syncing logic
-        const linkClubId = document.getElementById('link-club-id');
-        const linkMatchId = document.getElementById('link-match-id');
-
-        // Populate club-id from preselected radio
-        const checkedClubRadio = document.querySelector('input[name="clubId"]:checked');
-        if (checkedClubRadio) {
-            clubIdField.value = checkedClubRadio.value;
-            linkClubId.value = checkedClubRadio.value;
-        }
-
-        let selectedTheme = 'orange';
-        
-        const defaultThemeBtn = themeGrid.querySelector('[data-theme="orange"]');
-        if (defaultThemeBtn) {
-            defaultThemeBtn.classList.add('active');
-        }
-        
-        themeGrid.querySelectorAll('.theme-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                themeGrid.querySelectorAll('.theme-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                selectedTheme = btn.dataset.theme;
-                updateUrl();
-            });
-        });
-        
-        clubIdRadio.forEach(radio => {
-            radio.addEventListener('change', () => {
-                if (radio.checked) {
-                    clubIdField.value = radio.value;
-                    linkClubId.value = radio.value;
-                    updateUrl();
-                }
-            });
-        });
-        
-        function generateUrl() {
-            const matchId = matchIdField.value.trim() || '0';
-            const clubId = clubIdField.value.trim() || '40319';
-            const theme = selectedTheme;
-            const useDynamic = document.getElementById('dynamic-scale').checked;
-            const useSl = document.getElementById('streamlabs-mode').checked;
-            
-            const parts = [];
-            if (useDynamic) parts.push('dynamic=1');
-            if (useSl) parts.push('sl=1');
-            parts.push('matchId=' + encodeURIComponent(matchId));
-            parts.push('clubId=' + encodeURIComponent(clubId));
-            parts.push('theme=' + encodeURIComponent(theme));
-            
-            let baseUrl = window.location.origin + window.location.pathname;
-            baseUrl = baseUrl.replace(/link\.html$/, 'index.html');
-            if (!baseUrl.endsWith('index.html')) {
-                baseUrl = baseUrl + (baseUrl.endsWith('/') ? '' : '/') + 'index.html';
-            }
-            return baseUrl + '?' + parts.join('&');
-        }
-        
-        function updateUrl() {
-            const url = generateUrl();
-            urlPreview.textContent = new URL(url).href;
-            openBtn.href = url;
-            
-            // Sync match ID
-            linkMatchId.value = matchIdField.value.trim();
-        }
-        
-        matchIdField.addEventListener('input', () => {
-            updateUrl();
-        });
-        
-        clubIdField.addEventListener('input', () => {
-            clubIdRadio.forEach(r => r.checked = false);
-            linkClubId.value = clubIdField.value.trim();
-            updateUrl();
-        });
-        
-        document.getElementById('dynamic-scale').addEventListener('change', updateUrl);
-        document.getElementById('streamlabs-mode').addEventListener('change', updateUrl);
-        
-        copyBtn.addEventListener('click', async (e) => {
-            e.preventDefault();
-            const url = generateUrl();
-            try {
-                await navigator.clipboard.writeText(url);
-                const originalText = copyBtn.innerHTML;
-                copyBtn.textContent = 'Copied!';
-                setTimeout(() => { copyBtn.innerHTML = originalText; }, 2000);
-            } catch (err) {
-                const textArea = document.createElement('textarea');
-                textArea.value = url;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                const originalText = copyBtn.innerHTML;
-                copyBtn.textContent = 'Copied!';
-                setTimeout(() => { copyBtn.innerHTML = originalText; }, 2000);
-            }
-        });
-        
-        updateUrl();
-    </script>
 
     <script type="module">
         import { linkLiveStream } from './src/linkstream.ts';
