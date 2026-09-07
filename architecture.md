@@ -73,6 +73,11 @@ The page operates in two modes:
 - The overlay DOM is rendered: `#overlay-image` (sponsor), `#result` (match result), `#firstInnings` (main scoreboard), `#secondInnings` (chase info)
 - `src/script.ts` is loaded as an ES module and drives the update loop
 
+### 1.5. Link Stream Tool — `link.html`
+A standalone tool (`link.html`) and associated logic (`src/linkstream.ts`) are provided to link YouTube Live Streams to CricClubs match IDs.
+- Submits link assignments to CricClubs by opening a temporary window to bypass CORS/CORP policies.
+- Automatically polls the `liveScoreOverlayData.do` endpoint to verify success.
+
 ### 2. Update Loop — `src/script.ts`
 
 The main entry module. `updateScore()` is called immediately and then every `CONFIG.REFRESH_RATE` (5000 ms).

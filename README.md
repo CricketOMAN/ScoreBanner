@@ -33,13 +33,14 @@ The dev server starts at `http://localhost:5173`.
 3. Width: `1920`, Height: `1080` (or your canvas size).
 4. Append query parameters (see below).
 
-### 3. Setup Page
-Open the page in a browser — the setup panel gives you:
-- Match ID and Club ID fields
-- USACricketJunior (`40319`) preselected by default
-- 18 theme buttons (Orange is default)
-- Dynamic Scaling and Streamlabs Mode checkboxes (both checked by default)
-- Live URL preview with Open and Copy buttons
+### 3. Setup Config
+The scorecard configuration is handled in `index.html`. 
+
+### 4. Link Live Stream Tool
+Open `link.html` in a browser — this standalone tool allows you to attach a YouTube live stream link directly to a CricClubs match. It provides:
+- A form to input Club ID, Match ID, and YouTube Stream URL.
+- Logic to securely communicate with the CricClubs API.
+- Polling to confirm when the stream is successfully linked.
 
 ---
 
