@@ -230,6 +230,16 @@
         .hidden {
             display: none !important;
         }
+
+        /* Short.io specific styles */
+        .shortio-section { margin-top: 20px; background: #161b22; border: 1px solid #2a3645; border-radius: 12px; padding: 18px 20px; }
+        .shortio-section h2 { font-size: 16px; margin: 0 0 12px; color: #e6edf3; }
+        .shortio-links { display: flex; flex-wrap: wrap; gap: 10px; }
+        .shortio-btn { background: #238636; color: #ffffff; padding: 8px 14px; border-radius: 6px; border: 1px solid rgba(240,246,252,0.1); cursor: pointer; font-size: 14px; font-weight: 600; }
+        .shortio-btn:hover { background: #2ea043; }
+        .shortio-btn:disabled { background: #21262d; color: #8b949e; cursor: not-allowed; }
+        .status-msg { margin-top: 10px; font-size: 13px; color: #7ee2a8; display: none; }
+        .error-msg { margin-top: 10px; font-size: 13px; color: #ff7b72; display: none; }
     </style>
 </head>
 
@@ -312,6 +322,16 @@
         </div>
         
         <p class="help-text">Add as a <strong>Browser Source</strong> in OBS (1920×1080, transparent). Match ID is <code>0</code> until live scoring starts.</p>
+
+        <div class="shortio-section">
+            <h2>Update Existing Short Links</h2>
+            <p style="font-size:13px;color:#9fb0c0;margin-top:0;">Click a button below to update its destination to the URL generated above.</p>
+            <div class="shortio-links" id="shortio-links">
+                <span style="color:#8b949e;font-size:13px;">Loading links from Short.io...</span>
+            </div>
+            <div class="status-msg" id="shortio-status"></div>
+            <div class="error-msg" id="shortio-error"></div>
+        </div>
     </div>
 
     <div class="overlay">
@@ -487,6 +507,115 @@
             overlay.style.display = 'block';
         } else {
             updateUrl();
+            fetchShortioData();
+        }
+
+        // Short.io Integration
+        // We use the Cloudflare Worker as a proxy to avoid CORS issues and keep the API key secret.
+        const PROXY_BASE = 'https://overlay.cricketoman.workers.dev/shortio';
+        let shortioDomainId = null;
+
+        function showShortioStatus(msg, isError = false) {
+            const statusEl = document.getElementById('shortio-status');
+            const errorEl = document.getElementById('shortio-error');
+            if (isError) {
+                errorEl.textContent = msg;
+                errorEl.style.display = 'block';
+                statusEl.style.display = 'none';
+            } else {
+                statusEl.textContent = msg;
+                statusEl.style.display = 'block';
+                errorEl.style.display = 'none';
+                setTimeout(() => { statusEl.style.display = 'none'; }, 3000);
+            }
+        }
+
+        async function fetchShortioData() {
+            try {
+                // 1. Fetch domains to get the domain ID
+                const domainRes = await fetch(`${PROXY_BASE}/api/domains`);
+                if (!domainRes.ok) throw new Error('Failed to fetch domains');
+                const domains = await domainRes.json();
+                if (!domains || domains.length === 0) throw new Error('No domains found for this API key');
+                
+                shortioDomainId = domains[0].id; // Use the first domain
+
+                // 2. Fetch links for this domain
+                const linksRes = await fetch(`${PROXY_BASE}/api/links?domain_id=${shortioDomainId}&limit=50`);
+                if (!linksRes.ok) throw new Error('Failed to fetch links');
+                const linksData = await linksRes.json();
+                const links = linksData.links || [];
+
+                renderLinkButtons(links);
+            } catch (err) {
+                console.error(err);
+                const shortioLinksEl = document.getElementById('shortio-links');
+                if (shortioLinksEl) shortioLinksEl.innerHTML = '';
+                showShortioStatus('Error loading Short.io links: ' + err.message, true);
+            }
+        }
+
+        function renderLinkButtons(links) {
+            const container = document.getElementById('shortio-links');
+            if (!container) return;
+            container.innerHTML = '';
+            
+            if (links.length === 0) {
+                container.innerHTML = '<span style="color:#8b949e;font-size:13px;">No links found.</span>';
+                return;
+            }
+
+            links.forEach(link => {
+                const btn = document.createElement('button');
+                btn.className = 'shortio-btn';
+                // Use title if available, otherwise use the path
+                const btnName = link.title ? link.title : (link.path ? '/' + link.path : link.shortURL);
+                btn.textContent = btnName;
+                
+                btn.addEventListener('click', () => {
+                    const newTargetUrl = urlPreview.textContent || generateUrl();
+                    if (confirm(`Are you sure you want to update '${btnName}' to point to:\n\n${newTargetUrl}`)) {
+                        updateShortLink(link.idString || link.id, newTargetUrl, btn);
+                    }
+                });
+                
+                container.appendChild(btn);
+            });
+        }
+
+        async function updateShortLink(linkId, newTargetUrl, btnElement) {
+            const originalText = btnElement.textContent;
+            btnElement.textContent = 'Updating...';
+            btnElement.disabled = true;
+            
+            try {
+                const res = await fetch(`${PROXY_BASE}/links/${linkId}`, {
+                    method: 'POST',
+                    headers: {
+                        'content-type': 'application/json'
+                    },
+                    body: JSON.stringify({ originalURL: newTargetUrl })
+                });
+                
+                if (!res.ok) {
+                    const errData = await res.json();
+                    throw new Error(errData.error || 'Failed to update link');
+                }
+                
+                btnElement.textContent = 'Updated!';
+                btnElement.style.background = '#1f6feb'; // Blue to indicate success
+                setTimeout(() => {
+                    btnElement.textContent = originalText;
+                    btnElement.style.background = '';
+                    btnElement.disabled = false;
+                }, 2000);
+                showShortioStatus(`Successfully updated link destination.`);
+            } catch (err) {
+                console.error(err);
+                btnElement.textContent = originalText;
+                btnElement.disabled = false;
+                showShortioStatus('Error updating link: ' + err.message, true);
+            }
         }
     </script>
 
