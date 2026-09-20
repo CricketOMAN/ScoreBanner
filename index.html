@@ -500,16 +500,6 @@
             }
         });
         
-        // Check if overlay mode
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('matchId')) {
-            setupPanel.classList.add('hidden');
-            overlay.style.display = 'block';
-        } else {
-            updateUrl();
-            fetchShortioData();
-        }
-
         // Short.io Integration
         // We use the Cloudflare Worker as a proxy to avoid CORS issues and keep the API key secret.
         const PROXY_BASE = 'https://overlay.cricketoman.workers.dev/shortio';
@@ -616,6 +606,16 @@
                 btnElement.disabled = false;
                 showShortioStatus('Error updating link: ' + err.message, true);
             }
+        }
+
+        // Check if overlay mode
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('matchId')) {
+            setupPanel.classList.add('hidden');
+            overlay.style.display = 'block';
+        } else {
+            updateUrl();
+            fetchShortioData();
         }
     </script>
 
