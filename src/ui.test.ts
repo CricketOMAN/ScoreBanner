@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { updateScoreboard } from './ui';
+import { updateScoreboard, syncMarquees } from './ui';
 import { DOM } from './dom';
 
 // Simple mock data for elements
@@ -190,5 +190,53 @@ describe('instructions screen', () => {
 
     it('should have overlay element present in DOM', () => {
         expect(document.querySelector('.overlay')).not.toBeNull();
+    });
+});
+
+describe('syncMarquees', () => {
+    it('should apply is-marquee and --mo when text or ball row overflows container', () => {
+        const firstInnings = document.createElement('div');
+        firstInnings.id = 'firstInnings';
+        document.body.appendChild(firstInnings);
+
+        const bowlerName = DOM.bowlerName;
+        bowlerName.className = 'bowler-name';
+        bowlerName.textContent = 'VENKATESHWARAN SUBRAMANIAM';
+        firstInnings.appendChild(bowlerName);
+
+        const bowlerRow = document.createElement('div');
+        bowlerRow.className = 'bowler-row';
+        const ballByBall = DOM.ballContainer;
+        ballByBall.className = 'ball-by-ball-container';
+        bowlerRow.appendChild(ballByBall);
+        firstInnings.appendChild(bowlerRow);
+
+        Object.defineProperty(bowlerName, 'clientWidth', { value: 110, configurable: true });
+        syncMarquees();
+
+        const track = bowlerName.querySelector('.marquee-track') as HTMLElement;
+        expect(track).not.toBeNull();
+        expect(bowlerName.textContent).toBe('VENKATESHWARAN SUBRAMANIAM');
+
+        Object.defineProperty(track, 'scrollWidth', { value: 185, configurable: true });
+        const viewport = ballByBall.parentElement as HTMLElement;
+        expect(viewport.classList.contains('ball-by-ball-viewport')).toBe(true);
+        Object.defineProperty(viewport, 'clientWidth', { value: 180, configurable: true });
+        Object.defineProperty(ballByBall, 'scrollWidth', { value: 240, configurable: true });
+
+        syncMarquees();
+
+        expect(track.classList.contains('is-marquee')).toBe(true);
+        expect(track.style.getPropertyValue('--mo')).toBe('-75px');
+        expect(ballByBall.classList.contains('is-marquee')).toBe(true);
+        expect(ballByBall.style.getPropertyValue('--mo')).toBe('-60px');
+
+        // When content fits, marquee should be removed
+        Object.defineProperty(track, 'scrollWidth', { value: 90, configurable: true });
+        Object.defineProperty(ballByBall, 'scrollWidth', { value: 120, configurable: true });
+        syncMarquees();
+
+        expect(track.classList.contains('is-marquee')).toBe(false);
+        expect(ballByBall.classList.contains('is-marquee')).toBe(false);
     });
 });

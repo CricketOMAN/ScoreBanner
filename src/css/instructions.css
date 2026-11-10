@@ -121,6 +121,122 @@
 .instructions .tag-orange { background: #ff4136; color: #ffffff; }
 
 /*
+ * Universal Slim Profile & Overflow Marquee
+ * Trims vertical dead space across all themes while keeping font sizes intact,
+ * protects figures from clipping, and scrolls overflowing names / ball rows.
+ */
+.overlay {
+    line-height: 1.15;
+}
+
+.overlay .score-overlay {
+    align-items: stretch;
+}
+
+.overlay .batting-team-info,
+.overlay .bowling-team-info {
+    min-height: 0;
+    padding: 4px 10px;
+}
+
+.overlay .team-logo {
+    height: 40px;
+    width: 40px;
+}
+
+.overlay .scorecard-pill {
+    min-height: 0;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    justify-content: center;
+}
+
+.overlay .team-name {
+    line-height: 1.1;
+    margin-bottom: 1px;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.overlay .score-and-overs {
+    line-height: 1;
+}
+
+.overlay .batsman-info,
+.overlay .bowler-info {
+    gap: 1px;
+    justify-content: center;
+    max-width: 300px;
+}
+
+.overlay .batsman-row,
+.overlay .bowler-row {
+    padding: 2px 10px;
+    gap: 8px;
+    line-height: 1.15;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.overlay .batsman-name,
+.overlay .bowler-name {
+    display: block;
+    flex: 1 1 0%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.overlay .batsman-runs-balls,
+.overlay .bowler-figures {
+    flex-shrink: 0;
+    overflow: visible;
+    white-space: nowrap;
+}
+
+.overlay .ball-by-ball-viewport {
+    flex: 1 1 0%;
+    width: 100%;
+    min-width: 0;
+    overflow: hidden;
+}
+
+.overlay .ball-by-ball-container {
+    display: inline-flex;
+    align-items: center;
+    width: max-content;
+}
+
+.overlay .ball-indicator {
+    flex-shrink: 0;
+}
+
+.overlay .marquee-track {
+    display: inline-block;
+    white-space: nowrap;
+}
+
+@keyframes marquee-pan {
+    0%, 20% {
+        transform: translateX(0);
+    }
+    45%, 55% {
+        transform: translateX(var(--mo, 0px));
+    }
+    80%, 100% {
+        transform: translateX(0);
+    }
+}
+
+.overlay .marquee-track.is-marquee,
+.overlay .ball-by-ball-container.is-marquee {
+    animation: marquee-pan 8s ease-in-out infinite;
+    will-change: transform;
+}
+
+/*
  * Streamlabs Mode (body.prov-sl)
  * Compact overrides for Streamlabs / smaller browser-source canvases.
  * Scoped under body.prov-sl so base styles are unaffected.
@@ -132,8 +248,17 @@ body.prov-sl .bowling-team-info {
 
 body.prov-sl .batsman-info,
 body.prov-sl .bowler-info {
-    min-width: 0;
-    padding: 0 8px;
+    width: 205px;
+    min-width: 190px;
+    max-width: 220px;
+    padding: 0;
+    gap: 1px;
+}
+
+body.prov-sl .batsman-row,
+body.prov-sl .bowler-row {
+    padding: 2px 10px;
+    gap: 8px;
 }
 
 body.prov-sl .batsman-name {
@@ -147,14 +272,19 @@ body.prov-sl .bowler-name {
 body.prov-sl .batsman-runs-balls,
 body.prov-sl .bowler-figures {
     font-size: 12px;
+    flex-shrink: 0;
+    overflow: visible;
 }
 
 body.prov-sl .scorecard-pill {
-    padding: 4px 14px;
+    min-height: 0;
+    padding: 2px 14px;
 }
 
 body.prov-sl .team-name {
     font-size: 15px;
+    margin-bottom: 1px;
+    line-height: 1.1;
 }
 
 body.prov-sl .score,
@@ -197,6 +327,6 @@ body.prov-sl #result {
 }
 
 body.prov-sl .score-overlay {
-    padding: 0 8px;
-    gap: 2px;
+    padding: 0;
+    gap: 0;
 }

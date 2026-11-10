@@ -1,15 +1,15 @@
 import '@fontsource/montserrat/400.css';
 import '@fontsource/montserrat/600.css';
 import '@fontsource/montserrat/700.css';
-import './css/instructions.css';
 import { mock_1stInnings, mock_2ndInnings, mock_matchEnded, mock_toss, mock_noTeamImage } from './mockData';
 import { sampleReplayData } from './replayData';
 import { CONFIG } from './config';
 import { DOM } from './dom';
 import { getQueryParams } from './utils';
 import { applyTheme, updateLogo } from './theme';
+import './css/instructions.css';
 import { fetchScoreData } from './api';
-import { updateTeamLogos, updateScoreboard } from './ui';
+import { updateTeamLogos, updateScoreboard, syncMarquees } from './ui';
 import { CricketAPIData } from './types';
 
 let replayIndex = 0;
@@ -40,6 +40,7 @@ async function updateScore() {
     if (params.mode === 'replay') {
         const data = sampleReplayData[replayIndex] as unknown as CricketAPIData;
         updateScoreboard(data);
+        requestAnimationFrame(syncMarquees);
         replayIndex = (replayIndex + 1) % sampleReplayData.length;
         return;
     }
@@ -79,6 +80,7 @@ async function updateScore() {
 
         await updateTeamLogos(data);
         updateScoreboard(data);
+        requestAnimationFrame(syncMarquees);
 
     } catch (error) {
         console.error('Error fetching score data:', error);
@@ -118,19 +120,49 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
         }
         #scaling-wrapper .score-overlay {
             overflow: hidden;
+            align-items: stretch;
+        }
+        #scaling-wrapper .scorecard-pill {
+            min-height: 0;
+            padding-top: 2px;
+            padding-bottom: 2px;
+            justify-content: center;
+        }
+        #scaling-wrapper .batsman-info,
+        #scaling-wrapper .bowler-info {
+            gap: 1px;
+            justify-content: center;
+        }
+        #scaling-wrapper .batsman-row,
+        #scaling-wrapper .bowler-row {
+            padding: 2px 10px;
+            gap: 8px;
+            min-width: 0;
+            overflow: hidden;
         }
         #scaling-wrapper .batsman-name,
-        #scaling-wrapper .batsman-runs-balls,
-        #scaling-wrapper .bowler-name,
-        #scaling-wrapper .bowler-figures,
-        #scaling-wrapper .team-name {
+        #scaling-wrapper .bowler-name {
+            flex: 1 1 0%;
+            min-width: 0;
             overflow: hidden;
             max-width: 100%;
         }
+        #scaling-wrapper .team-name {
+            overflow: hidden;
+            max-width: 100%;
+            margin-bottom: 1px;
+            line-height: 1.1;
+        }
+        #scaling-wrapper .batsman-runs-balls,
+        #scaling-wrapper .bowler-figures {
+            flex-shrink: 0;
+            overflow: visible;
+        }
         #scaling-wrapper .ball-by-ball-container {
-            display: flex;
+            display: inline-flex;
             align-items: center;
             gap: 3px;
+            width: max-content;
         }
         #scaling-wrapper .ball-by-ball-container .ball-indicator {
             width: 14px;
@@ -138,6 +170,7 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
             min-width: 14px;
             font-size: 7px;
             border-radius: 50%;
+            flex-shrink: 0;
         }
         #scaling-wrapper .ball-by-ball-container .ball-indicator.wide,
         #scaling-wrapper .ball-by-ball-container .ball-indicator.no-ball,
@@ -255,6 +288,7 @@ function injectDynamicScale(overlayEl: HTMLElement): void {
             }
             ruleEl.textContent = `#scaling-wrapper { transform: scale(${scale}); }`;
         }
+        syncMarquees();
     }
 
     const mo = new MutationObserver(() => {

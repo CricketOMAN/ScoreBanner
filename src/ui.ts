@@ -177,3 +177,65 @@ export function updateScoreboard(data: CricketAPIData) {
 
     updateBallByBall(data.balls || [], currentTeamOvers || '0.0');
 }
+
+/**
+ * Synchronizes slow back-and-forth marquee animations on text elements
+ * (.batsman-name, .bowler-name, .team-name) and the ball-by-ball container
+ * whenever their content exceeds the available container width.
+ */
+export function syncMarquees(): void {
+    const first = document.getElementById('firstInnings');
+    if (!first) return;
+
+    const textSelectors = ['.batsman-name', '.bowler-name', '.team-name'];
+    textSelectors.forEach(sel => {
+        first.querySelectorAll<HTMLElement>(sel).forEach(container => {
+            let track = container.querySelector<HTMLElement>('.marquee-track');
+            if (!track) {
+                track = document.createElement('span');
+                track.className = 'marquee-track';
+                track.textContent = container.textContent;
+                container.textContent = '';
+                container.appendChild(track);
+            }
+            const overflow = track.scrollWidth - container.clientWidth;
+            if (overflow > 1) {
+                const offset = `-${overflow}px`;
+                if (track.style.getPropertyValue('--mo') !== offset) {
+                    track.style.setProperty('--mo', offset);
+                }
+                if (!track.classList.contains('is-marquee')) {
+                    track.classList.add('is-marquee');
+                }
+            } else {
+                track.classList.remove('is-marquee');
+                track.style.removeProperty('--mo');
+            }
+        });
+    });
+
+    const ballContainer = document.getElementById('ball-by-ball');
+    if (ballContainer && ballContainer.parentElement) {
+        let viewport = ballContainer.parentElement;
+        if (!viewport.classList.contains('ball-by-ball-viewport')) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'ball-by-ball-viewport';
+            viewport.insertBefore(wrapper, ballContainer);
+            wrapper.appendChild(ballContainer);
+            viewport = wrapper;
+        }
+        const overflow = ballContainer.scrollWidth - viewport.clientWidth;
+        if (overflow > 1) {
+            const offset = `-${overflow}px`;
+            if (ballContainer.style.getPropertyValue('--mo') !== offset) {
+                ballContainer.style.setProperty('--mo', offset);
+            }
+            if (!ballContainer.classList.contains('is-marquee')) {
+                ballContainer.classList.add('is-marquee');
+            }
+        } else {
+            ballContainer.classList.remove('is-marquee');
+            ballContainer.style.removeProperty('--mo');
+        }
+    }
+}
