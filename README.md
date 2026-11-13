@@ -15,7 +15,8 @@ A professional, lightweight, and responsive cricket scorecard overlay designed f
 - **Automated Deployment**: GitHub Actions builds and deploys to GitHub Pages on push.
 
 > **Credits**: This project is inspired by and builds upon the work of [abhinav91690](https://github.com/abhinav91690/cricket-scorecard-overlay). The original implementation provided the foundation for the CricClubs API integration, scoreboard layout, and core overlay mechanics.
-https://github.com/ksheerasagar17/cricket-scorecard-overlay
+https://github.com/ksheerasagar17/cricket-scorecard-overlay 
+https://score.abhinav.dev/
 
 ---
 
